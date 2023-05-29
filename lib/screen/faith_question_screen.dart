@@ -28,6 +28,7 @@ class _FaithQuestionScreenState extends State<FaithQuestionScreen> {
   void initState() {
     super.initState();
     _loadInterstitialAd();
+    TokenDBHelper.refreshToken();
 
   }
 

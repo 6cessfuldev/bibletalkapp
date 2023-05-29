@@ -29,10 +29,6 @@ class TokenDBHelper {
       },
     );
 
-    final token = Token(count: 5, updateDate: DateTime.now().toString());
-
-    insertToken(token);
-
     return database;
   }
 
@@ -52,12 +48,19 @@ class TokenDBHelper {
 
   Future<List<Token>> getTokens() async {
     final List<Map<String, dynamic>> maps = await getData();
-    return List.generate(maps.length, (i) {
-      return Token(
-        count: maps[i]['count'],
-        updateDate: maps[i]['updateDate'],
-      );
-    });
+    print(maps);
+    if(maps.isEmpty) {
+      Token token = Token(count: 5, updateDate: DateTime.now().toString());
+      await insertToken(token);
+      return [token];
+    }else{
+      return List.generate(maps.length, (i) {
+        return Token(
+          count: maps[i]['count'],
+          updateDate: maps[i]['updateDate'],
+        );
+      });
+    }
   }
 
   Future<void> updateToken (Token token) async {
@@ -73,7 +76,10 @@ class TokenDBHelper {
     if(list.isNotEmpty) {
       int _token = list[0].count;
       DateTime update = DateTime.parse(list[0].updateDate);
-      if(update.difference(DateTime.now()).inDays > 0) {
+      print(update);
+      print(DateTime.now());
+      print(update.difference(DateTime.now()).inDays.abs());
+      if(update.difference(DateTime.now()).inDays.abs() > 0) {
         Token newToken = Token(count: 5, updateDate: DateTime.now().toString());
         TokenDBHelper().updateToken(newToken);
         return newToken.count;

@@ -105,6 +105,7 @@ class _BibleListScreenState extends State<BibleListScreen> {
   void initState() {
     super.initState();
     _loadInterstitialAd();
+    TokenDBHelper.refreshToken();
   }
 
   Future<void> _loadInterstitialAd() async {
